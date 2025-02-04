@@ -30,6 +30,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebaes.firestore();
 
         // Google Sign-in Functionality
         document.getElementById("google-signin").addEventListener("click", () => {
