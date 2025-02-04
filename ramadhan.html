@@ -1,0 +1,61 @@
+<div class="container">
+    <h2>Ramadhan Good Deeds Tracker</h2>
+    <div id="calendar-container">
+        <h3>Ramadhan Calendar</h3>
+        <input type="date" id="date-picker">
+        <button onclick="setReminder()">Set Reminder</button>
+        <p id="reminder-message"></p>
+    </div>
+    <div id="deeds-list">
+        <div class="deed"><span>Prayed all 5 daily prayers</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Gave charity</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Helped someone in need</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Read Quran</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Did Dhikr (remembrance of Allah)</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Fasted the whole day</span><input type="checkbox" class="deed-checkbox"></div>
+        <div class="deed"><span>Made dua for others</span><input type="checkbox" class="deed-checkbox"></div>
+    </div>
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+    <div id="qa-container">
+        <h3>Ask a Question about Islam</h3>
+        <input type="text" id="question" placeholder="Type your question here...">
+        <button onclick="searchIslamQA()">Ask</button>
+        <p id="answer"></p>
+    </div>
+</div>
+
+
+<script>
+    const checkboxes = document.querySelectorAll('.deed-checkbox');
+    const progress = document.getElementById('progress');
+    
+    function updateProgress() {
+        const total = checkboxes.length;
+        const checked = document.querySelectorAll('.deed-checkbox:checked').length;
+        const percentage = (checked / total) * 100;
+        progress.style.width = percentage + '%';
+    }
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateProgress);
+    });
+    
+    function setReminder() {
+        const date = document.getElementById('date-picker').value;
+        document.getElementById('reminder-message').textContent = `Reminder set for ${date}!`;
+    }
+
+    function searchIslamQA() {
+        const question = document.getElementById('question').value.trim();
+        if (question) {
+            const searchUrl = `https://islamqa.info/en/search?q=${encodeURIComponent(question)}`;
+            window.open(searchUrl, '_blank');
+        } else {
+            alert('Please enter a question.');
+        }
+    }
+    </script>
+    </body>
+</html>
