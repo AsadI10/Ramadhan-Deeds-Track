@@ -1,77 +1,74 @@
-/* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
-/* General Reset */
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: 'Inter', sans-serif;
-}
-/* Body Styling */
-body {
-    background: linear-gradient(to bottom, #1a1a2e, #16213e, #0f3460);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(to bottom, #0d1b2a, #1b263b, #415a77);
     overflow: hidden;
+    position: relative;
 }
-/* Container */
-.login-container {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-/* Title */
-h2 {
-    color: #fff;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-/* Google Sign-in Button */
-button {
-    background-color: #f4c531;
-    color: #1a1a2e;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: 0.3s ease-in-out;
-}
-button:hover {
-    background-color: #ffdd57;
-}
-/* Animated Moon & Stars */
+/* Moving Moon */
 .moon {
     position: absolute;
     top: 10%;
-    right: 10%;
-    width: 100px;
-    height: 100px;
-    background: #f4c531;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #f4f4f4, #d9d9d9);
     border-radius: 50%;
-    box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.6);
+    animation: moveMoon 15s linear infinite;
 }
+@keyframes moveMoon {
+    0% { transform: translateX(-100px); }
+    50% { transform: translateX(100px); }
+    100% { transform: translateX(-100px); }
+}
+/* Shining Stars */
 .star {
     position: absolute;
-    background: #fff;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 150%;
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     animation: twinkle 2s infinite alternate;
 }
-.star:nth-child(1) { top: 15%; left: 20%; animation-delay: 0.5s; }
-star:nth-child(2) { top: 25%; right: 30%; animation-delay: 1s; }
-.star:nth-child(3) { top: 40%; left: 10%; animation-delay: 1.5s; }
-.star:nth-child(4) { top: 60%; right: 50%; animation-delay: 2s; }
-.star:nth-child(5) { top: 80%; left: 40%; animation-delay: 2.5s; }
 @keyframes twinkle {
-    0% { opacity: 0.5; }
+    0% { opacity: 0.2; }
     100% { opacity: 1; }
+}
+/* Login Box */
+.login-container {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    color: white;
+    z-index: 10;
+}
+.login-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+/* Button */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #f4c531;
+    color: #333;
+    font-weight: bold;
+    transition: 0.3s;
+}
+button:hover {
+    background: #ffdd57;
+    box-shadow: 0px 0px 10px rgba(255, 221, 87, 0.7);
 }
