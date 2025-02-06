@@ -148,3 +148,32 @@ input[type="date"], input[type="text"], input[type="number"] {
     margin: 10px auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
+/* left and right  */
+#islamic-calendar {
+    position: absolute;
+    left: 0;
+    top: 5%;
+    width: 391px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+}
+#dashboard-icon {
+    position: absolute;
+    right: 0;
+    top: 5%;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#dashboard-icon img {
+    width: 50px;
+    cursor: pointer;
+}
+.container {
+    width: 60%;
+    text-align: center;
+    margin: auto;
+}
