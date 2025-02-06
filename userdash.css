@@ -1,0 +1,42 @@
+ /* User Dashboard Styling */
+ #dashboard-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-align: center;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+#dashboard-container h3 {
+    color: #2c3e50;
+}
+.dashboard-list {
+    list-style: none;
+    padding: 0;
+}
+.dashboard-list li {
+    padding: 5px;
+    background: #f7e6d4;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+#close-dashboard, #logout {
+    margin-top: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 7px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#close-dashboard:hover, #logout:hover {
+    background: #c0392b;
+}
