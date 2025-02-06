@@ -165,41 +165,34 @@
         
         //load missed fasts from local storage
         document.addEventListener("DOMContentLoaded", loadMissedFasts);
-
-function markMissedFast() {
+        function markMissedFast() {
     const date = document.getElementById("date-picker").value;
     if (!date) {
         alert("Please select a date.");
         return;
     }
 
-    let missedFasts = JSON.parse(localStorage.getItem("missedFasts")) || [];
-    if (!missedFasts.includes(date)) {
-        missedFasts.push(date);
-        localStorage.setItem("missedFasts", JSON.stringify(missedFasts));
+    let missedFastsList = document.getElementById("missed-fasts-list");
+
+    // Check if the date is already marked
+    if (document.getElementById(`missed-${date}`)) {
+        alert("This date is already marked as missed.");
+        return;
     }
 
-    updateMissedFastsDisplay();
+    // Create list item
+    let listItem = document.createElement("li");
+    listItem.id = `missed-${date}`;
+    listItem.innerHTML = `${date} <button onclick="removeMissedFast('${date}')">❌</button>`;
+
+    missedFastsList.appendChild(listItem);
 }
 
-// Update UI to show missed fasts
-function updateMissedFastsDisplay() {
-    let missedFasts = JSON.parse(localStorage.getItem("missedFasts")) || [];
-    document.getElementById("missed-fasts").textContent = missedFasts.length;
-
-    let missedList = document.getElementById("missed-fasts-list");
-    missedList.innerHTML = "<h5>Missed Fast Dates:</h5>";
-    missedFasts.forEach(date => {
-        let dateElement = document.createElement("div");
-        dateElement.textContent = date;
-        dateElement.classList.add("missed-fast-date");
-        missedList.appendChild(dateElement);
-    });
-}
-
-// Load missed fasts when page loads
-function loadMissedFasts() {
-    updateMissedFastsDisplay();
+function removeMissedFast(date) {
+    let itemToRemove = document.getElementById(`missed-${date}`);
+    if (itemToRemove) {
+        itemToRemove.remove();
+    }
 }
     </script>
 </body>
