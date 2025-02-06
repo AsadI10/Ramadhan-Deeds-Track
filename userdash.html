@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramadhan Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Ramadhan Dashboard</h2>
+        <button onclick="showDashboard()">View My Logs</button>
+    </div>
+
+    <div id="dashboard-container">
+        <h3>My Ramadan Logs</h3>
+        <h4>Missed Fasts</h4>
+        <ul id="missed-fasts-list" class="dashboard-list"></ul>
+        <h4>Good Deeds</h4>
+        <ul id="good-deeds-list" class="dashboard-list"></ul>
+        <h4>Reminders</h4>
+        <ul id="reminders-list" class="dashboard-list"></ul>
+        <h4>Prayer Times</h4>
+        <ul id="prayer-logs-list" class="dashboard-list"></ul>
+        <button id="close-dashboard" onclick="closeDashboard()">Close</button>
+    </div>
+</body>
+</html>
