@@ -9,13 +9,27 @@
 <body>
     <div class="container">
         <h2>Ramadhan Good Deeds Tracker</h2>
+        
+        <!-- Ramadhan Calendar -->
         <div id="calendar-container">
             <h3>Ramadhan Calendar</h3>
             <input type="date" id="date-picker">
             <button onclick="setReminder()">Set Reminder</button>
             <p id="reminder-message"></p>
+            <h4>Missed Fasts: <span id="missed-fasts">0</span></h4>
+            <button onclick="markMissedFast()">Mark Missed Fast</button>
         </div>
+
+        <!-- Daily Hadith/Quote -->
+        <div id="daily-hadith">
+            <h3>Daily Islamic Quote</h3>
+            <p id="hadith-text">"The best among you are those who bring the most benefit to others." - Prophet Muhammad (SAW)</p>
+            <button onclick="getNewHadith()">New Quote</button>
+        </div>
+        
+        <!-- Good Deeds List -->
         <div id="deeds-list">
+            <h3>Good Deeds Checklist</h3>
             <div class="deed"><span>Prayed all 5 daily prayers</span><input type="checkbox" class="deed-checkbox"></div>
             <div class="deed"><span>Gave charity</span><input type="checkbox" class="deed-checkbox"></div>
             <div class="deed"><span>Helped someone in need</span><input type="checkbox" class="deed-checkbox"></div>
@@ -23,10 +37,25 @@
             <div class="deed"><span>Did Dhikr (remembrance of Allah)</span><input type="checkbox" class="deed-checkbox"></div>
             <div class="deed"><span>Fasted the whole day</span><input type="checkbox" class="deed-checkbox"></div>
             <div class="deed"><span>Made dua for others</span><input type="checkbox" class="deed-checkbox"></div>
+            <div class="deed"><span>Prayed Taraweeh</span><input type="checkbox" class="deed-checkbox"></div>
+            <div class="deed"><span>Donated to charity</span><input type="checkbox" class="deed-checkbox"></div>
+            <div class="deed"><span>Avoided bad habits</span><input type="checkbox" class="deed-checkbox"></div>
+            <div class="deed"><span>Learned something new about Islam</span><input type="checkbox" class="deed-checkbox"></div>
         </div>
+        
+        <!-- Progress Bar -->
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
+        
+        <!-- Daily Notes Section -->
+        <div id="notes-section">
+            <h3>Daily Reflections</h3>
+            <textarea id="daily-notes" placeholder="Write your thoughts here..."></textarea>
+            <button onclick="saveNotes()">Save Notes</button>
+        </div>
+
+        <!-- Islamic Q&A -->
         <div id="qa-container">
             <h3>Ask a Question about Islam</h3>
             <input type="text" id="question" placeholder="Type your question here...">
@@ -35,27 +64,42 @@
         </div>
     </div>
 
-
     <script>
         const checkboxes = document.querySelectorAll('.deed-checkbox');
         const progress = document.getElementById('progress');
-        
+        let missedFasts = 0;
         function updateProgress() {
             const total = checkboxes.length;
             const checked = document.querySelectorAll('.deed-checkbox:checked').length;
             const percentage = (checked / total) * 100;
             progress.style.width = percentage + '%';
         }
-        
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', updateProgress);
         });
-        
         function setReminder() {
             const date = document.getElementById('date-picker').value;
             document.getElementById('reminder-message').textContent = `Reminder set for ${date}!`;
         }
-
+        function markMissedFast() {
+            missedFasts++;
+            document.getElementById('missed-fasts').textContent = missedFasts;
+        }
+        function getNewHadith() {
+            const hadiths = [
+                "The best among you are those who learn the Quran and teach it.",
+                "Whoever fasts during Ramadan with faith and seeking reward will have his past sins forgiven.",
+                "Kindness is a mark of faith, and whoever is not kind has no faith.",
+                "Do not waste water, even if you perform your ablution on the banks of an abundantly-flowing river."
+            ];
+            const randomHadith = hadiths[Math.floor(Math.random() * hadiths.length)];
+            document.getElementById('hadith-text').textContent = randomHadith;
+        }
+        function saveNotes() {
+            const notes = document.getElementById('daily-notes').value;
+            localStorage.setItem('dailyNotes', notes);
+            alert('Notes saved!');
+        }
         function searchIslamQA() {
             const question = document.getElementById('question').value.trim();
             if (question) {
