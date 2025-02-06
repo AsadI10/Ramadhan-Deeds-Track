@@ -18,6 +18,7 @@
             <p id="reminder-message"></p>
             <h4>Missed Fasts: <span id="missed-fasts">0</span></h4>
             <button onclick="markMissedFast()">Mark Missed Fast</button>
+            <div id="missed-fasts-list"></div>
         </div>
 
         <!-- Daily Hadith/Quote -->
@@ -161,6 +162,45 @@
                 }
             }, 60000);
         }
+        
+        //load missed fasts from local storage
+        document.addEventListener("DOMContentLoaded", loadMissedFasts);
+
+function markMissedFast() {
+    const date = document.getElementById("date-picker").value;
+    if (!date) {
+        alert("Please select a date.");
+        return;
+    }
+
+    let missedFasts = JSON.parse(localStorage.getItem("missedFasts")) || [];
+    if (!missedFasts.includes(date)) {
+        missedFasts.push(date);
+        localStorage.setItem("missedFasts", JSON.stringify(missedFasts));
+    }
+
+    updateMissedFastsDisplay();
+}
+
+// Update UI to show missed fasts
+function updateMissedFastsDisplay() {
+    let missedFasts = JSON.parse(localStorage.getItem("missedFasts")) || [];
+    document.getElementById("missed-fasts").textContent = missedFasts.length;
+
+    let missedList = document.getElementById("missed-fasts-list");
+    missedList.innerHTML = "<h5>Missed Fast Dates:</h5>";
+    missedFasts.forEach(date => {
+        let dateElement = document.createElement("div");
+        dateElement.textContent = date;
+        dateElement.classList.add("missed-fast-date");
+        missedList.appendChild(dateElement);
+    });
+}
+
+// Load missed fasts when page loads
+function loadMissedFasts() {
+    updateMissedFastsDisplay();
+}
     </script>
 </body>
 </html>
