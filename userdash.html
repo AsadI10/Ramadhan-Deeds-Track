@@ -4,18 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ramadhan Dashboard</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <!-- Modular Firebase SDK imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-YUvwUVHG277M6r9lOva9w4jhc3Lq8Hg",
+            authDomain: "ramadhan-deed.firebaseapp.com",
+            projectId: "ramadhan-deed",
+            storageBucket: "ramadhan-deed.appspot.com", <!-- Corrected storageBucket value -->
+            messagingSenderId: "1080765223493",
+            appId: "1:1080765223493:web:0b0ba143ac0e11af49c92c",
+            measurementId: "G-JWBFRBBCE0"
+        };
+
+        // Initialize Firebase services
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let userId = null;
+
+        // Google login function
+        window.googleLogin = async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                userId = result.user.uid;
+                toggleAuthButtons(true);
+            } catch (err) {
+                console.error("Login failed:", err.message);
+            }
+        };
+
+        // Logout function
+        window.logout = async () => {
+            try {
+                await signOut(auth);
+                userId = null;
+                toggleAuthButtons(false);
+            } catch (err) {
+                console.error("Logout failed:", err.message);
+            }
+        };
+
+        // Show dashboard data
+        window.showDashboard = async () => {
+            if (!userId) {
+                alert("Please log in first.");
+                return;
+            }
+
+            const userDocRef = doc(db, "users", userId);
+            const docSnap = await getDoc(userDocRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById("missed-fasts-list").innerHTML = (data.missedFasts || []).map(date => `<li>${date}</li>`).join('');
+                document.getElementById("good-deeds-list").innerHTML = (data.goodDeeds || []).map(deed => `<li>${deed}</li>`).join('');
+                document.getElementById("reminders-list").innerHTML = (data.reminders || []).map(reminder => `<li>${reminder}</li>`).join('');
+                document.getElementById("prayer-logs-list").innerHTML = (data.prayerLogs || []).map(prayer => `<li>${prayer}</li>`).join('');
+                document.getElementById("dashboard-container").style.display = "block";
+            } else {
+                alert("No logs found for this user.");
+            }
+        };
+
+        // Close dashboard
+        window.closeDashboard = () => {
+            document.getElementById("dashboard-container").style.display = "none";
+        };
+
+        // Toggle buttons based on login status
+        const toggleAuthButtons = (loggedIn) => {
+            document.getElementById('login').style.display = loggedIn ? 'none' : 'block';
+            document.getElementById('logout').style.display = loggedIn ? 'block' : 'none';
+        };
+
+        // Listen for auth state changes
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userId = user.uid;
+                toggleAuthButtons(true);
+            } else {
+                toggleAuthButtons(false);
+            }
+        });
+    </script>
+
     <link rel="stylesheet" href="userdash.css">
 </head>
 <body>
     <div class="container">
         <h2>Ramadhan Dashboard</h2>
+        <button id="login" onclick="googleLogin()">Login with Google</button>
+        <button id="logout" onclick="logout()" style="display:none;">Logout</button>
         <button onclick="showDashboard()">View My Logs</button>
     </div>
 
-    <div id="dashboard-container">
+    <div id="dashboard-container" style="display:none;">
         <h3>My Ramadan Logs</h3>
         <h4>Missed Fasts</h4>
         <ul id="missed-fasts-list" class="dashboard-list"></ul>
@@ -25,69 +114,7 @@
         <ul id="reminders-list" class="dashboard-list"></ul>
         <h4>Prayer Times</h4>
         <ul id="prayer-logs-list" class="dashboard-list"></ul>
-        <button id="close-dashboard" onclick="closeDashboard()">Close</button>
+        <button onclick="closeDashboard()">Close</button>
     </div>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-YUvwUVHG277M6r9lOva9w4jhc3Lq8Hg",
-            authDomain: "ramadhan-deed.firebaseapp.com",
-            projectId: "ramadhan-deed",
-            storageBucket: "ramadhan-deed.firebasestorage.app",
-            messagingSenderId: "1080765223493",
-            appId: "1:1080765223493:web:0b0ba143ac0e11af49c92c",
-            measurementId: "G-JWBFRBBCE0"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        let userId = null;
-        function googleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).then(result => {
-                userId = result.user.uid;
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('logout').style.display = 'block';
-                document.getElementById('view-logs').style.display = 'block';
-            });
-        }
-
-        function logout() {
-            firebase.auth().signOut().then(() => {
-                userId = null;
-                document.getElementById('login').style.display = 'block';
-                document.getElementById('logout').style.display = 'none';
-                document.getElementById('view-logs').style.display = 'none';
-            });
-        }
-
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                userId = user.uid;
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('logout').style.display = 'block';
-                document.getElementById('view-logs').style.display = 'block';
-            }
-        });
-
-        function showDashboard() {
-            if (!userId) {
-                alert("Please log in first.");
-                return;
-            }
-            db.collection("users").doc(userId).get().then(doc => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    document.getElementById("missed-fasts-list").innerHTML = data.missedFasts.map(date => `<li>${date}</li>`).join('');
-                    document.getElementById("good-deeds-list").innerHTML = data.goodDeeds.map(deed => `<li>${deed}</li>`).join('');
-                    document.getElementById("reminders-list").innerHTML = data.reminders.map(reminder => `<li>${reminder}</li>`).join('');
-                    document.getElementById("prayer-logs-list").innerHTML = data.prayerLogs.map(prayer => `<li>${prayer}</li>`).join('');
-                }
-            });
-            document.getElementById("dashboard-container").style.display = "block";
-        }
-
-        function closeDashboard() {
-            document.getElementById("dashboard-container").style.display = "none";
-        }
-    </script>
 </body>
 </html>
